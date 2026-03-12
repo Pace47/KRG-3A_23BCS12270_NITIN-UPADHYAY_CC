@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Job {
+public:
+    int id;
+    int deadline;
+    int profit;
+};
+
+bool cmp(Job a, Job b) {
+    return a.profit > b.profit;
+}
+
+void jobScheduling(vector<Job>& jobs) {
+    sort(jobs.begin(), jobs.end(), cmp);
+
+    int maxDeadline = 0;
+    for (auto &j : jobs) {
+        maxDeadline = max(maxDeadline, j.deadline);
+    }
+
+    vector<int> slot(maxDeadline, -1);
+
+    int countJobs = 0;
+    int maxProfit = 0;
+
+    for (auto &j : jobs) {
+        for (int i = j.deadline - 1; i >= 0; i--) {
+            if (slot[i] == -1) {
+                slot[i] = j.id;
+                countJobs++;
+                maxProfit += j.profit;
+                break;
+            }
+        }
+    }
+
+    cout << countJobs << endl;
+    cout << maxProfit << endl;
+}
+
+int main() {
+    vector<Job> jobs = {
+        {1, 4, 20},
+        {2, 1, 10},
+        {3, 1, 4},
+        {4, 1, 30}
+    };
+
+    jobScheduling(jobs);
+    return 0;
+}
